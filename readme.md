@@ -10,7 +10,7 @@ Requires Go 1.9+ since the package is using [type aliases](https://golang.org/do
 $ go get -u github.com/frozzare/go-cache
 ```
 
-## Usage
+## Example
 
 ```go
 package main
