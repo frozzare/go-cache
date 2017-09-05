@@ -1,0 +1,6 @@
+[[constraint]]
+    name = "github.com/go-redis/redis"
+    version = "v6.6.0"
+
+[[constraint]]
+    name = "github.com/pquerna/ffjson"
