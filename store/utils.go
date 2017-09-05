@@ -9,7 +9,7 @@ import (
 )
 
 func isJSON(s string) bool {
-	return (s[0] == '{' || s[0] == '[') && (s[len(s)-1] == '}' || s[len(s)-1] == ']')
+	return (s[0] == '{' && s[len(s)-1] == '}') || (s[0] == '[' || s[len(s)-1] == ']')
 }
 
 // Marshal value to bytes using gob or ffjson.
