@@ -1,8 +1,9 @@
-package store
+package redis
 
 import (
 	"time"
 
+	"github.com/frozzare/go-cache/store"
 	goredis "github.com/go-redis/redis"
 )
 
@@ -15,7 +16,7 @@ type RedisStore struct {
 }
 
 // NewRedisStore will create a new redis store with the given options.
-func NewRedisStore(o *RedisOptions) *RedisStore {
+func NewRedisStore(o *RedisOptions) store.Store {
 	if o == nil {
 		o = &RedisOptions{
 			Addr: "localhost:6379",
@@ -54,7 +55,7 @@ func (s *RedisStore) Result(key string, v interface{}) error {
 		return err
 	}
 
-	if err := Unmarshal(b, v); err != nil {
+	if err := store.Unmarshal(b, v); err != nil {
 		return err
 	}
 
@@ -63,7 +64,7 @@ func (s *RedisStore) Result(key string, v interface{}) error {
 
 // Get will retrieve a item from the cache.
 func (s *RedisStore) Get(key string) (interface{}, error) {
-	var i *Item
+	var i *store.Item
 
 	if err := s.Result(key, &i); err != nil {
 		return nil, err
@@ -89,7 +90,7 @@ func (s *RedisStore) Number(key string) (int64, error) {
 
 // Remember will retrieve a item from the cache, but also store a default value if the requested item
 // doesn't exists or is empty.
-func (s *RedisStore) Remember(key string, expiration time.Duration, fn RememberFunc) (interface{}, error) {
+func (s *RedisStore) Remember(key string, expiration time.Duration, fn store.RememberFunc) (interface{}, error) {
 	v, err := s.Get(key)
 	if v != nil && err == nil {
 		return v, nil
@@ -118,7 +119,7 @@ func (s *RedisStore) Set(key string, value interface{}, expiration time.Duration
 	case []byte:
 		b = value.([]byte)
 	default:
-		b, err = Marshal(value)
+		b, err = store.Marshal(value)
 		if err != nil {
 			return err
 		}

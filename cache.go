@@ -11,9 +11,6 @@ type Cache struct {
 	store store.Store
 }
 
-// Option function.
-type Option func(*Cache)
-
 // New with the given options.
 func New(options ...Option) *Cache {
 	var v Cache
@@ -21,13 +18,6 @@ func New(options ...Option) *Cache {
 		o(&v)
 	}
 	return &v
-}
-
-// Redis option will create a new Redis store with the given options.
-func Redis(r *store.RedisOptions) Option {
-	return func(c *Cache) {
-		c.store = store.NewRedisStore(r)
-	}
 }
 
 // Decrement the value of an item in the cache.

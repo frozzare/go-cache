@@ -16,28 +16,28 @@ $ go get -u github.com/frozzare/go-cache
 package main
 
 import (
-    "fmt"
-    "log"
+	"fmt"
+	"log"
 
-    "github.com/frozzare/go-cache"
-    "github.com/frozzare/go-cache/store"
+	"github.com/frozzare/go-cache"
+	"github.com/frozzare/go-cache/store/redis"
 )
 
 func main() {
-    c := cache.New(cache.Redis(&store.RedisOptions{
-        Addr: "localhost:6379",
-    }))
+	c := cache.New(cache.Redis(&redis.RedisOptions{
+		Addr: "localhost:6379",
+	}))
 
-    if err := c.Set("name", "go"); err != nil {
-        log.Fatal(err)
-    }
+	if err := c.Set("name", "go"); err != nil {
+		log.Fatal(err)
+	}
 
-    v, err := c.Get("name")
-    if err != nil {
-        log.Fatal(err)
-    }
+	v, err := c.Get("name")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    fmt.Println(v)
+	fmt.Println(v)
 }
 ```
 
