@@ -26,7 +26,7 @@ import (
 func main() {
     c := cache.New(cache.Redis(&store.RedisOptions{
         Addr: "localhost:6379",
-	}))
+    }))
 
     if err := c.Set("name", "go"); err != nil {
         log.Fatal(err)
