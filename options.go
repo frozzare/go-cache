@@ -6,8 +6,8 @@ import "github.com/frozzare/go-cache/store/redis"
 type Option func(*Cache)
 
 // Redis option will create a new Redis store with the given options.
-func Redis(r *redis.RedisOptions) Option {
+func Redis(r *redis.Options) Option {
 	return func(c *Cache) {
-		c.store = redis.NewRedisStore(r)
+		c.store = redis.NewStore(r)
 	}
 }

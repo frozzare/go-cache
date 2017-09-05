@@ -8,7 +8,7 @@ import (
 )
 
 func TestRedis(t *testing.T) {
-	c := NewRedisStore(nil)
+	c := NewStore(nil)
 
 	values := []interface{}{
 		"go",
@@ -56,7 +56,7 @@ func TestRedis(t *testing.T) {
 }
 
 func TestRedisIncrementDecrement(t *testing.T) {
-	c := NewRedisStore(nil)
+	c := NewStore(nil)
 
 	if err := c.Remove("num"); err != nil {
 		t.Fatal(err)
@@ -85,7 +85,7 @@ func TestRedisIncrementDecrement(t *testing.T) {
 }
 
 func TestRedisStruct(t *testing.T) {
-	c := NewRedisStore(nil)
+	c := NewStore(nil)
 
 	type User struct {
 		Name string `json:"name"`
