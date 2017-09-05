@@ -24,7 +24,7 @@ import (
 )
 
 func main() {
-	c := cache.New(cache.Redis(&redis.Options{
+	c := cache.New(redis.NewStore(&redis.Options{
 		Addr: "localhost:6379",
 	}))
 

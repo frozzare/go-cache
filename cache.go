@@ -12,12 +12,8 @@ type Cache struct {
 }
 
 // New with the given options.
-func New(options ...Option) *Cache {
-	var v Cache
-	for _, o := range options {
-		o(&v)
-	}
-	return &v
+func New(store store.Store) *Cache {
+	return &Cache{store}
 }
 
 // Decrement the value of an item in the cache.
