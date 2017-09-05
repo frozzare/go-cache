@@ -12,7 +12,7 @@ func isJSON(s string) bool {
 	return (s[0] == '{' || s[0] == '[') && (s[len(s)-1] == '}' || s[len(s)-1] == ']')
 }
 
-// Marshal value to bytes using gob.
+// Marshal value to bytes using gob or ffjson.
 func Marshal(value interface{}) ([]byte, error) {
 	switch reflect.ValueOf(value).Kind() {
 	case reflect.Ptr, reflect.Struct, reflect.Map:
@@ -33,7 +33,7 @@ func Marshal(value interface{}) ([]byte, error) {
 	}
 }
 
-// Unmarshal bytes with gob.
+// Unmarshal bytes with gob or ffjson.
 func Unmarshal(buf []byte, value interface{}) error {
 	if isJSON(string(buf)) {
 		return ffjson.Unmarshal(buf, value)
