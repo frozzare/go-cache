@@ -22,5 +22,14 @@ type RememberFunc func() interface{}
 
 // Item represents a item in the cache.
 type Item struct {
-	Object interface{}
+	Expiration time.Duration
+	Object     interface{}
+}
+
+// Expired returns true if the item has expired.
+func (item Item) Expired() bool {
+	if item.Expiration == 0 {
+		return false
+	}
+	return time.Now().UnixNano() > int64(item.Expiration)
 }
