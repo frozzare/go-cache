@@ -43,6 +43,8 @@ func (s *Store) item(key string) (store.Item, error) {
 func (s *Store) Decrement(key string, args ...int64) (int64, error) {
 	i, err := s.item(key)
 	if err != nil {
+		// Redis sets the value to zero if it don't exists so
+		// this will make the memory decrement works the same way.
 		i = store.Item{
 			Object: int64(0),
 		}
@@ -107,6 +109,8 @@ func (s *Store) Get(key string) (interface{}, error) {
 func (s *Store) Increment(key string, args ...int64) (int64, error) {
 	i, err := s.item(key)
 	if err != nil {
+		// Redis sets the value to zero if it don't exists so
+		// this will make the memory increment works the same way.
 		i = store.Item{
 			Object: int64(0),
 		}
