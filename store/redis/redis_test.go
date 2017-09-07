@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRedis(t *testing.T) {
+func TestStore(t *testing.T) {
 	c := NewStore(nil)
 
 	values := []interface{}{
@@ -55,12 +55,8 @@ func TestRedis(t *testing.T) {
 	}
 }
 
-func TestRedisIncrementDecrement(t *testing.T) {
+func TestStoreIncrementDecrement(t *testing.T) {
 	c := NewStore(nil)
-
-	if err := c.Remove("num"); err != nil {
-		t.Fatal(err)
-	}
 
 	if _, err := c.Increment("num"); err != nil {
 		t.Fatal(err)
@@ -84,7 +80,7 @@ func TestRedisIncrementDecrement(t *testing.T) {
 	}
 }
 
-func TestRedisStruct(t *testing.T) {
+func TestStoreStruct(t *testing.T) {
 	c := NewStore(nil)
 
 	type User struct {
