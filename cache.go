@@ -16,11 +16,6 @@ func New(store store.Store) *Cache {
 	return &Cache{store}
 }
 
-// Decrement the value of an item in the cache.
-func (c *Cache) Decrement(key string, args ...int64) (int64, error) {
-	return c.store.Decrement(key, args...)
-}
-
 // Flush remove all items from the cache.
 func (c *Cache) Flush() error {
 	return c.store.Flush()
@@ -29,22 +24,6 @@ func (c *Cache) Flush() error {
 // Get will retrive a item from the cache.
 func (c *Cache) Get(key string) (interface{}, error) {
 	return c.store.Get(key)
-}
-
-// Increment the value of an item in the cache.
-func (c *Cache) Increment(key string, args ...int64) (int64, error) {
-	return c.store.Increment(key, args...)
-}
-
-// Number will retrieve the number set by decrement and increment methods from the cache.
-func (c *Cache) Number(key string) (int64, error) {
-	return c.store.Number(key)
-}
-
-// Remember will retrive a item from the cache, but also store a default value if the requested item
-// doesn't exists or is empty.
-func (c *Cache) Remember(key string, exp time.Duration, fn store.RememberFunc) (interface{}, error) {
-	return c.store.Remember(key, exp, fn)
 }
 
 // Remove will remove a item from the cache.

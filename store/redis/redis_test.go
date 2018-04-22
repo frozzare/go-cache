@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"errors"
 	"fmt"
 	"reflect"
 	"testing"
@@ -9,6 +8,8 @@ import (
 
 func TestStore(t *testing.T) {
 	c := NewStore(nil)
+
+	defer c.Close()
 
 	values := []interface{}{
 		"go",
@@ -55,33 +56,10 @@ func TestStore(t *testing.T) {
 	}
 }
 
-func TestStoreIncrementDecrement(t *testing.T) {
-	c := NewStore(nil)
-
-	if _, err := c.Increment("num"); err != nil {
-		t.Fatal(err)
-	}
-
-	if r, err := c.Number("num"); r != 1 {
-		fmt.Println(err)
-		t.Fatal(fmt.Errorf("%v does not match the expected value: %v", r, 1))
-	}
-
-	if _, err := c.Decrement("num"); err != nil {
-		t.Fatal(err)
-	}
-
-	if r, _ := c.Number("num"); r != 0 {
-		t.Fatal(errors.New("Num does not match expected number"))
-	}
-
-	if err := c.Remove("num"); err != nil {
-		t.Fatal(err)
-	}
-}
-
 func TestStoreStruct(t *testing.T) {
 	c := NewStore(nil)
+
+	defer c.Close()
 
 	type User struct {
 		Name string `json:"name"`
@@ -94,7 +72,7 @@ func TestStoreStruct(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := c.Result("struct", &o); err == nil && o.Name == "go" {
+	if err := c.Result("struct", &o); err == nil && o.Name != "go" {
 		t.Fatal(fmt.Errorf("User name does not match the expected value: %v", o.Name))
 	}
 

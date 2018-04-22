@@ -39,32 +39,9 @@ func (s *Store) item(key string) (store.Item, error) {
 	return i, nil
 }
 
-// Decrement the value of an item in the cache.
-func (s *Store) Decrement(key string, args ...int64) (int64, error) {
-	i, err := s.item(key)
-	if err != nil {
-		// Redis sets the value to zero if it don't exists so
-		// this will make the memory decrement works the same way.
-		i = store.Item{
-			Object: int64(0),
-		}
-	}
-
-	iv := int64(1)
-	if len(args) > 0 {
-		iv = args[0]
-	}
-
-	ev, ok := i.Object.(int64)
-	if !ok {
-		return 0, fmt.Errorf("The value for %s is not an int64", key)
-	}
-
-	nv := ev - iv
-	i.Object = nv
-	s.setItem(key, i)
-
-	return nv, nil
+// Close store.
+func (s *Store) Close() error {
+	return nil
 }
 
 // Flush remove all items from the cache.
@@ -75,22 +52,6 @@ func (s *Store) Flush() error {
 	return nil
 }
 
-// Result will retrieve a item from the cache and stores the
-// result in the value pointed to by v.
-func (s *Store) Result(key string, v interface{}) error {
-	i, err := s.item(key)
-	if err != nil {
-		return err
-	}
-
-	buf, err := store.Marshal(i.Object)
-	if err != nil {
-		return err
-	}
-
-	return store.Unmarshal(buf, &v)
-}
-
 // Get will retrieve a item from the cache.
 func (s *Store) Get(key string) (interface{}, error) {
 	i, err := s.item(key)
@@ -99,65 +60,6 @@ func (s *Store) Get(key string) (interface{}, error) {
 	}
 
 	return i.Object, nil
-}
-
-// Increment the value of an item in the cache.
-func (s *Store) Increment(key string, args ...int64) (int64, error) {
-	i, err := s.item(key)
-	if err != nil {
-		// Redis sets the value to zero if it don't exists so
-		// this will make the memory increment works the same way.
-		i = store.Item{
-			Object: int64(0),
-		}
-	}
-
-	iv := int64(1)
-	if len(args) > 0 {
-		iv = args[0]
-	}
-
-	ev, ok := i.Object.(int64)
-	if !ok {
-		return 0, fmt.Errorf("The value for %s is not an int64", key)
-	}
-
-	nv := ev + iv
-	i.Object = nv
-	s.setItem(key, i)
-
-	return nv, nil
-}
-
-// Number will retrieve the number set by decrement and increment methods from the cache.
-func (s *Store) Number(key string) (int64, error) {
-	i, err := s.item(key)
-	if err != nil {
-		return 0, err
-	}
-
-	ev, ok := i.Object.(int64)
-	if !ok {
-		return 0, fmt.Errorf("The value for %s is not an int64", key)
-	}
-	return ev, nil
-}
-
-// Remember will retrieve a item from the cache, but also store a default value if the requested item
-// doesn't exists or is empty.
-func (s *Store) Remember(key string, expiration time.Duration, fn store.RememberFunc) (interface{}, error) {
-	v, err := s.Get(key)
-	if v != nil && err == nil {
-		return v, nil
-	}
-
-	v = fn()
-
-	if err := s.Set(key, v, expiration); err != nil {
-		return nil, err
-	}
-
-	return v, nil
 }
 
 // Remove will remove a item from the cache.
@@ -174,6 +76,22 @@ func (s *Store) Remove(key string) error {
 	s.mu.Unlock()
 
 	return nil
+}
+
+// Result will retrieve a item from the cache and stores the
+// result in the value pointed to by value.
+func (s *Store) Result(key string, value interface{}) error {
+	i, err := s.item(key)
+	if err != nil {
+		return err
+	}
+
+	buf, err := store.Marshal(i.Object)
+	if err != nil {
+		return err
+	}
+
+	return store.Unmarshal(buf, &value)
 }
 
 // Set will store a item in the cache.

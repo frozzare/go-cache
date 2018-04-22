@@ -16,9 +16,7 @@ func isJSON(s string) bool {
 func Marshal(value interface{}) ([]byte, error) {
 	switch reflect.ValueOf(value).Kind() {
 	case reflect.Ptr, reflect.Struct, reflect.Map:
-		return ffjson.Marshal(&Item{
-			Object: value,
-		})
+		return ffjson.Marshal(value)
 	default:
 		b := &bytes.Buffer{}
 		err := gob.NewEncoder(b).Encode(&Item{

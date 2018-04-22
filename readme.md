@@ -1,6 +1,6 @@
 # cache [![Build Status](https://travis-ci.org/frozzare/go-cache.svg?branch=master)](https://travis-ci.org/frozzare/go-cache) [![GoDoc](https://godoc.org/github.com/frozzare/go-cache?status.svg)](https://godoc.org/github.com/frozzare/go-cache) [![Go Report Card](https://goreportcard.com/badge/github.com/frozzare/go-cache)](https://goreportcard.com/report/github.com/frozzare/go-cache)
 
-Go package for dealing with caching.
+Go package for dealing with caching. Maybe not so fast.
 
 Requires Go 1.9+ since the package is using [type aliases](https://golang.org/doc/go1.9#language).
 
@@ -14,6 +14,7 @@ $ go get -u github.com/frozzare/go-cache
 
 * Memory
 * Redis
+* Boltdb
 
 More cache stores can be implemented by using the provided store interface.
 
