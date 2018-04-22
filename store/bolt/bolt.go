@@ -1,4 +1,4 @@
-package boltdb
+package bolt
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/boltdb/bolt"
+	boltdb "github.com/boltdb/bolt"
 	"github.com/frozzare/go-cache/store"
 )
 
@@ -15,33 +15,17 @@ var (
 	bucketTTL = []byte("store_ttl")
 )
 
-// Options represents boltdb store options.
-type Options struct {
-	Name       string
-	Permission os.FileMode
-	Options    *bolt.Options
-}
+// Options is a alias for bolt options.
+type Options = boltdb.Options
 
 // Store represents the redis cache store.
 type Store struct {
-	db *bolt.DB
+	db *boltdb.DB
 }
 
 // NewStore will create a new redis store with the given options.
-func NewStore(o *Options) (store.Store, error) {
-	if o == nil {
-		o = &Options{}
-	}
-
-	if len(o.Name) == 0 {
-		o.Name = "store.db"
-	}
-
-	if o.Permission == os.FileMode(0) {
-		o.Permission = 0600
-	}
-
-	db, err := bolt.Open(o.Name, o.Permission, o.Options)
+func NewStore(name string, permission os.FileMode, opts *Options) (store.Store, error) {
+	db, err := boltdb.Open(name, permission, opts)
 
 	return &Store{
 		db: db,
@@ -55,7 +39,7 @@ func (s *Store) Close() error {
 
 // Flush remove all items from the cache.
 func (s *Store) Flush() error {
-	return s.db.Update(func(tx *bolt.Tx) error {
+	return s.db.Update(func(tx *boltdb.Tx) error {
 		if err := tx.DeleteBucket(bucketTTL); err == nil {
 			_, err := tx.CreateBucket(bucketTTL)
 			return err
@@ -93,7 +77,7 @@ func (s *Store) Get(key string) (interface{}, error) {
 
 // Remove will remove a item from the cache.
 func (s *Store) Remove(key string) error {
-	return s.db.Update(func(tx *bolt.Tx) error {
+	return s.db.Update(func(tx *boltdb.Tx) error {
 		b := tx.Bucket(bucketTTL)
 		b.Delete(bucketTTL)
 		b = tx.Bucket(bucket)
@@ -104,7 +88,7 @@ func (s *Store) Remove(key string) error {
 // Result will retrieve a item from the cache and stores the
 // result in the value pointed to by value.
 func (s *Store) Result(key string, value interface{}) error {
-	return s.db.View(func(tx *bolt.Tx) error {
+	return s.db.View(func(tx *boltdb.Tx) error {
 		b := tx.Bucket(bucketTTL)
 
 		exp := b.Get([]byte(key))
@@ -127,7 +111,7 @@ func (s *Store) Result(key string, value interface{}) error {
 
 // Set will store a item in the cache.
 func (s *Store) Set(key string, value interface{}, expiration time.Duration) error {
-	return s.db.Update(func(tx *bolt.Tx) error {
+	return s.db.Update(func(tx *boltdb.Tx) error {
 		b, err := tx.CreateBucketIfNotExists(bucket)
 
 		if err != nil {

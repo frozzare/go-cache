@@ -1,4 +1,4 @@
-package boltdb
+package bolt
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestStore(t *testing.T) {
-	c, err := NewStore(nil)
+	c, err := NewStore("store.db", 0600, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -60,7 +60,7 @@ func TestStore(t *testing.T) {
 }
 
 func TestStoreExpired(t *testing.T) {
-	c, err := NewStore(nil)
+	c, err := NewStore("store.db", 0600, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestStoreExpired(t *testing.T) {
 }
 
 func TestStoreStruct(t *testing.T) {
-	c, err := NewStore(nil)
+	c, err := NewStore("store.db", 0600, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
