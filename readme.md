@@ -24,7 +24,6 @@ More cache stores can be implemented by using the provided store interface.
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/frozzare/go-cache"
@@ -45,7 +44,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(v)
+	log.Println(v)
 }
 ```
 
