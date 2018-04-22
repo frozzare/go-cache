@@ -88,11 +88,7 @@ func (s *Store) Result(key string, v interface{}) error {
 		return err
 	}
 
-	if err := store.Unmarshal(buf, &v); err != nil {
-		return err
-	}
-
-	return nil
+	return store.Unmarshal(buf, &v)
 }
 
 // Get will retrieve a item from the cache.
