@@ -14,7 +14,7 @@ $ go get -u github.com/frozzare/go-cache
 
 * Memory
 * Redis
-* Boltdb
+* Bolt
 
 More cache stores can be implemented by using the provided store interface.
 
