@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"errors"
 	"time"
 
 	"github.com/frozzare/go-cache/store"
