@@ -64,7 +64,7 @@ func (s *Store) Get(key string) (interface{}, error) {
 		return nil, err
 	}
 	
-	if i != nil {
+	if i == nil {
 		return nil, errors.New("empty redis result")
 	}
 
